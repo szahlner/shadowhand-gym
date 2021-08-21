@@ -16,7 +16,7 @@ def distance(a: np.ndarray, b: np.ndarray) -> float:
         float: Distance to goal.
     """
     assert a.shape == b.shape, "Shape of 'a' must match shape of 'b'"
-    return np.linalg.norm(a - b)
+    return np.linalg.norm(a - b, axis=-1)
 
 
 class Reach(Task):
