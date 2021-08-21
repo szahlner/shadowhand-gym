@@ -1,0 +1,2 @@
+from shadowhand_gym.envs.shadowhand_tasks.shadowhand_reach import ShadowHandReachEnv
+from shadowhand_gym.envs.shadowhand_tasks.shadowhand_block import ShadowHandBlockEnv

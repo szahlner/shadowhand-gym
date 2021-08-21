@@ -1,0 +1,243 @@
+import os
+from abc import ABC
+
+import numpy as np
+import gym
+
+from gym import utils, spaces
+from typing import List, Tuple
+from shadowhand_gym.pybullet import PyBullet
+
+
+def get_data_path():
+    data_path = os.path.join(os.path.dirname(__file__))
+    return data_path
+
+
+class PyBulletRobot:
+
+    JOINT_INDICES = None
+    JOINT_FORCES = None
+
+    def __init__(
+        self,
+        sim: PyBullet,
+        body_name: str,
+        file_name: str,
+        base_position: List[float],
+        base_orientation: List[float],
+    ) -> None:
+        """Base class for robot env.
+
+        Args:
+            sim (PyBullet): The simulation engine.
+            body_name (str): The name of the robot within the simulation.
+            file_name (str): Path of the URDF file.
+            base_position (List[float]): Cartesian position of the base of the robot [x, y, z].
+            base_orientation (List[float]): Orientation of the base of the robot in quaternions [x, y, z, w].
+        """
+        self.sim = sim
+        self.body_name = body_name
+        with self.sim.no_rendering():
+            self._load_robot(
+                file_name=file_name,
+                base_position=base_position,
+                base_orientation=base_orientation,
+            )
+            self.setup()
+
+    def _load_robot(
+        self, file_name: str, base_position: List[float], base_orientation: List[float]
+    ) -> None:
+        """Load the robot.
+
+        Args:
+            file_name (str): Path of the URDF file.
+            base_position (List[float]): Cartesian position of the base of the robot [x, y, z].
+                Defaults to [0.0, 0.0, 0.0].
+            base_orientation (List[float]): Orientation of the base of the robot in quaternions [x, y, z, w].
+                Defaults to [0.0, 0.0, 0.0, 1.0].
+        """
+        self.sim.loadURDF(
+            body_name=self.body_name,
+            fileName=file_name,
+            basePosition=base_position,
+            baseOrientation=base_orientation,
+            useFixedBase=True,
+        )
+
+    def setup(self) -> None:
+        """Called once in the constructor."""
+        pass
+
+    def set_action(self, action):
+        """Perform the action."""
+        raise NotImplementedError
+
+    def get_obs(self):
+        """Return the observation associated to the robot."""
+        raise NotImplementedError
+
+    def reset(self):
+        """Reset the robot."""
+        raise NotImplementedError
+
+    def get_joint_position(self, joint: int) -> float:
+        """Returns the position of the joint.
+
+        Args:
+            joint (int): Joint index in the body.
+
+        Returns:
+            float: Joint position.
+        """
+        return self.sim.get_joint_position(self.body_name, joint)
+
+    def get_joint_velocity(self, joint: int) -> float:
+        """Returns the velocity of the joint.
+
+        Args:
+            joint (int): Joint index in the body.
+
+        Returns:
+            float: Joint velocity.
+        """
+        return self.sim.get_joint_velocity(self.body_name, joint)
+
+    def get_link_position(self, link: int) -> Tuple[float, float, float]:
+        """Returns the cartesian position of a link as (x, y, z).
+
+        Args:
+            link (int): Link index in the body.
+
+        Returns:
+            (float, float, float): Link cartesian position.
+        """
+        return self.sim.get_link_position(self.body_name, link)
+
+    def get_link_velocity(self, link: int) -> Tuple[float, float, float]:
+        """Returns the velocity of a link as (vx, vy, vz).
+
+        Args:
+            link (int): Link index in the body.
+
+        Returns:
+            (float, float, float): Link velocity.
+        """
+        return self.sim.get_link_velocity(self.body_name, link)
+
+    def control_joints(self, target_positions: List[float]) -> None:
+        """Control the joints of the robot.
+
+        Args:
+            target_positions (List[float]): List of target positions/angles.
+        """
+        assert self.JOINT_INDICES is not None, "JOINT_INDICES must not be None"
+        assert self.JOINT_FORCES is not None, "JOINT_FORCES must not be None"
+
+        self.sim.control_joints(
+            body=self.body_name,
+            joint_indices=self.JOINT_INDICES,
+            target_positions=target_positions,
+            target_forces=self.JOINT_FORCES,
+        )
+
+
+class RobotTaskEnv(gym.GoalEnv, ABC):
+
+    metadata = {"render.modes": ["human", "rgb_array"]}
+
+    def __init__(self):
+        self.seed()  # required for init, can be changed later
+        obs = self.reset()
+
+        observation_shape = obs["observation"].shape
+        achieved_goal_shape = obs["achieved_goal"].shape
+        desired_goal_shape = obs["desired_goal"].shape
+        self.observation_space = spaces.Dict(
+            dict(
+                observation=spaces.Box(-np.inf, np.inf, shape=observation_shape),
+                achieved_goal=spaces.Box(-np.inf, np.inf, shape=achieved_goal_shape),
+                desired_goal=spaces.Box(-np.inf, np.inf, shape=desired_goal_shape),
+            )
+        )
+
+        self.action_space = self.robot.action_space
+        self.compute_reward = self.task.compute_reward
+        self.render = self.sim.render
+
+    def _get_obs(self):
+        robot_obs = self.robot.get_obs()  # robot state
+        task_obs = self.task.get_obs()  # object position, velocity, etc.
+        observation = np.concatenate([robot_obs, task_obs])
+
+        achieved_goal = self.task.get_achieved_goal()
+
+        return {
+            "observation": observation,
+            "achieved_goal": achieved_goal,
+            "desired_goal": self.task.get_goal(),
+        }
+
+    def reset(self):
+        with self.sim.no_rendering():
+            self.robot.reset()
+            self.task.reset()
+
+        return self._get_obs()
+
+    def step(self, action):
+        self.robot.set_action(action)
+        self.sim.step()
+
+        obs = self._get_obs()
+        done = False
+        info = {
+            "is_success": self.task.is_success(
+                obs["achieved_goal"], self.task.get_goal()
+            ),
+        }
+        reward = self.task.compute_reward(
+            obs["achieved_goal"], self.task.get_goal(), info
+        )
+
+        return obs, reward, done, info
+
+    def seed(self, seed=None):
+        """Setup the seed."""
+        return self.task.seed(seed)
+
+    def close(self):
+        self.sim.close()
+
+
+class Task:
+    """To be completed."""
+
+    def get_goal(self):
+        """Return the current goal."""
+        raise NotImplementedError
+
+    def get_obs(self):
+        """Return the observation associated to the task."""
+        raise NotImplementedError
+
+    def get_achieved_goal(self):
+        """Return the achieved goal."""
+        raise NotImplementedError
+
+    def reset(self):
+        """Reset the task: sample a new goal."""
+        pass
+
+    def seed(self, seed):
+        """Sets the seed for this env's random number."""
+        self.np_random, seed = utils.seeding.np_random(seed)
+
+    def is_success(self, achieved_goal, desired_goal):
+        """Returns whether the acieved goal matches the desired goal or not."""
+        raise NotImplementedError
+
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        """Compute reward associated to the achieved and the desired goal."""
+        raise NotImplementedError
