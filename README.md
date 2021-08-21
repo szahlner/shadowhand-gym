@@ -26,7 +26,8 @@ env = gym.make('ShadowHandReach-v1', render=True)
 obs = env.reset()
 done = False
 while not done:
-    action = env.action_space.sample()  # random action
+    # random action
+    action = env.action_space.sample()
     obs, reward, done, info = env.step(action)
 
 env.close()
@@ -36,10 +37,10 @@ env.close()
 
 | | |
 | :------------------------------: | :--------------------------------------------: |
-| `ShadowHandReach-v1` **easy** | `ShadowHandReach-v1` **hard** |
+| `ShadowHandReach-v1` **easy mode** | `ShadowHandReach-v1` **hard mode** |
 | ![ShadowHandReach-v1 easy](./docs/ShadowHandReach-v1_easy.gif) | ![ShadowHandReach-v1_hard](./docs/ShadowHandReach-v1_hard.gif) |
 | `ShadowHandBlock-v1` **orientation** | |
 | ![ShadowHandBlock-v1](./docs/ShadowHandBlock-v1.gif) | |
 
 Environments are widely inspired from [OpenAI ShadowHand environments](https://openai.com/blog/ingredients-for-robotics-research/).  
-Code inspired from [qgallouedec's panda-gym](https://github.com/qgallouedec/panda-gym).
+Code is inspired from [qgallouedec's panda-gym](https://github.com/qgallouedec/panda-gym).
