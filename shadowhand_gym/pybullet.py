@@ -89,12 +89,13 @@ class PyBullet:
     ) -> None:
         """Render.
 
-        If mode is human, make the rendering real-time.
+        If mode is 'human', make the rendering real-time.
         If mode is 'rgb_array', return rgb_array of the scene.
+        If mode is 'mp4', return mp4 video.
         All other arguments are unused.
 
         Args:
-            mode (str, optional): 'human' or 'rgb_array'. If human, just sleep a few time to make the rendering
+            mode (str, optional): 'human', 'rgb_array' or 'mp4'. If human, just sleep a few time to make the rendering
                 real-time, else, return an RGB array. Defaults to 'human'.
             width (int, optional): Image width. Defaults to 920.
             height (int, optional): Image height. Defaults to 720.
@@ -144,7 +145,7 @@ class PyBullet:
             rgb_array = rgb_array[:, :, :3]
 
             return rgb_array
-        elif mode == "logger":
+        elif mode == "mp4":
             self._logger_id = p.startStateLogging(
                 loggingType=p.STATE_LOGGING_VIDEO_MP4, fileName="filename.mp4"
             )
