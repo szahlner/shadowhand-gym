@@ -64,6 +64,17 @@ class Reach(Task):
         distance_threshold: float = 0.05,
         difficult_mode: str = "easy",
     ) -> None:
+        """Shadow dexterous hand reach task.
+
+        Args:
+            sim (PyBullet): PyBullet client to interact with the simulator.
+            robot (ShadowHand): Shadow dexterous hand robot.
+            reward_type (str, optional): Reward type. Choose from 'dense' or 'sparse'. Defaults to 'sparse'.
+            distance_threshold (float, optional): Distance threshold to determine between success and failure.
+            difficult_mode (str, optional): Difficulty. Choose from 'easy' or 'hard'. Defaults to 'easy'.
+                'easy': only choose between one of the 4 given fingertip positions.
+                'hard': choose between all of the 4 given fingertip positions (per finger).
+        """
         assert reward_type in [
             "dense",
             "sparse",
@@ -87,7 +98,10 @@ class Reach(Task):
 
         self.goal = None
 
-    def _create_scene(self):
+    def _create_scene(self) -> None:
+        """Create scene.
+
+        Add (ghost) objects and stuff that is not included in the robot URDF file."""
         self.sim.create_sphere(
             body_name="target_index_finger",
             radius=0.01,
@@ -129,17 +143,33 @@ class Reach(Task):
             rgba_color=[0.9, 0.1, 0.9, 0.5],
         )
 
-    def get_goal(self):
+    def get_goal(self) -> np.ndarray:
+        """Return goal.
+
+        Returns:
+            np.ndarray: Cartesian positions of the fingertips (target).
+        """
         return self.goal.copy()
 
-    def get_obs(self):
+    def get_obs(self) -> np.ndarray:
+        """Return task specific observations.
+
+        Returns:
+            np.ndarray: Empty.
+        """
         return np.array([])  # no task specific observations
 
-    def get_achieved_goal(self):
+    def get_achieved_goal(self) -> np.ndarray:
+        """Return achieved goal.
+
+        Returns:
+            np.ndarray: Cartesian positions of the fingertips.
+        """
         positions = self.robot.get_fingertip_positions()
         return positions.flatten()
 
-    def reset(self):
+    def reset(self) -> None:
+        """Reset task."""
         self.goal = self._sample_goal()
         self.sim.set_base_pose("target_index_finger", self.goal[0], [0, 0, 0, 1])
         self.sim.set_base_pose("target_middle_finger", self.goal[1], [0, 0, 0, 1])
@@ -148,8 +178,12 @@ class Reach(Task):
         self.sim.set_base_pose("target_thumb", self.goal[4], [0, 0, 0, 1])
         self.goal = self.goal.flatten()
 
-    def _sample_goal(self):
-        """Randomize goal."""
+    def _sample_goal(self) -> np.ndarray:
+        """Randomize goal.
+
+        Returns:
+            np.ndarray: Cartesian positions of the fingertips (target).
+        """
         # Difficult mode: easy
         # Only choose between one of the 4 given fingertip positions
         goal_choice = self.np_random.choice(
@@ -172,12 +206,22 @@ class Reach(Task):
         return goal.copy()
 
     def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> float:
+        """Return success or failure.
+
+        Returns:
+            float: Success or failure (1.0 = success, 0.0 = failure).
+        """
         d = distance(achieved_goal, desired_goal)
         return (d < self.distance_threshold).astype(np.float32)
 
     def compute_reward(
         self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict
     ) -> float:
+        """Return reward.
+
+        Returns:
+            float: The reward for a particular action.
+        """
         d = distance(achieved_goal, desired_goal)
         if self.reward_type == "sparse":
             return (d < self.distance_threshold).astype(np.float32) - 1.0

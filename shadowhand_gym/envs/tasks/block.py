@@ -50,6 +50,20 @@ class Block(Task):
         distance_threshold: float = 0.05,
         block_half_extend: float = 0.02,
     ) -> None:
+        """Shadow dexterous hand manipulate block task.
+
+        Args:
+            sim (PyBullet): PyBullet client to interact with the simulator.
+            robot (ShadowHand): Shadow dexterous hand robot.
+            reward_type (str, optional): Reward type. Choose from 'dense' or 'sparse'. Defaults to 'sparse'.
+            distance_threshold (float, optional): Distance threshold to determine between success and failure.
+            block_half_extend (float, optional): Half extend of the block in metres. Defaults to 0.02.
+        """
+        assert reward_type in [
+            "dense",
+            "sparse",
+        ], "Reward type must be 'dense' or 'sparse'"
+
         self.sim = sim
         self.robot = robot
         self.reward_type = reward_type
@@ -64,7 +78,10 @@ class Block(Task):
 
         self.goal = None
 
-    def _create_scene(self):
+    def _create_scene(self) -> None:
+        """Create scene.
+
+        Add (ghost) objects and stuff that is not included in the robot URDF file."""
         self.sim.create_object(
             body_name="object",
             mass=0.5,
@@ -75,10 +92,20 @@ class Block(Task):
             mesh_scale=[self.block_half_extend] * 3,
         )
 
-    def get_goal(self):
+    def get_goal(self) -> np.ndarray:
+        """Return goal.
+
+        Returns:
+            np.ndarray: Cartesian position and orientation in quaternions of the object (target).
+        """
         return self.goal.copy()
 
-    def get_obs(self):
+    def get_obs(self) -> np.ndarray:
+        """Return task specific observations.
+
+        Returns:
+            np.ndarray: Object velocity, angular velocity, cartesian position and orientation in quaternions.
+        """
         object_velocity = self.get_object_velocity()
         object_angular_velocity = self.get_object_angular_velocity()
         achieved_goal = self.get_achieved_goal()
@@ -88,17 +115,23 @@ class Block(Task):
         )
         return observations
 
-    def get_achieved_goal(self):
+    def get_achieved_goal(self) -> np.ndarray:
+        """Return achieved goal.
+
+        Returns:
+            np.ndarray: Cartesian position and orientation in quaternions.
+        """
         object_position = self.get_object_position()
         object_orientation = self.get_object_orientation()
 
         achieved_goal = np.concatenate([object_position, object_orientation])
         return achieved_goal
 
-    def reset(self):
+    def reset(self) -> None:
+        """Reset task."""
         self.goal = self._sample_goal()
 
-        # Let object spawn slightly above the hand palm
+        # Let object spawn slightly above the hand palm position to prevent it to fall off
         palm_position = self.robot.get_palm_position()
         object_start_position = palm_position + np.array([0.05, 0.0, 0.075])
         angle = self.np_random.uniform(-np.pi, np.pi)
@@ -111,8 +144,12 @@ class Block(Task):
             "object", object_start_position, object_start_orientation
         )
 
-    def _sample_goal(self):
-        """Randomize goal."""
+    def _sample_goal(self) -> np.ndarray:
+        """Randomize goal.
+
+        Returns:
+            np.ndarray: Cartesian position and orientation in quaternions of the object (target).
+        """
         goal_orientation = self.sim.physics_client.getQuaternionFromEuler(
             self.GOAL_ORIENTATION
         )
@@ -124,32 +161,58 @@ class Block(Task):
         return goal
 
     def get_object_position(self) -> np.ndarray:
-        """Get current object position."""
+        """Get current object position.
+
+        Returns:
+            np.ndarray: Cartesian position of the object.
+        """
         position = self.sim.get_base_position("object")
         return np.array(position)
 
     def get_object_orientation(self) -> np.ndarray:
-        """Get current object orientation."""
+        """Get current object orientation.
+
+        Returns:
+            np.ndarray: Object orientation in quaternions.
+        """
         orientation = self.sim.get_base_orientation("object")
         return np.array(orientation)
 
     def get_object_velocity(self) -> np.ndarray:
-        """Get current object cartesian velocity."""
+        """Get current object cartesian velocity.
+
+        Returns:
+            np.ndarray: Cartesian velocity of the object.
+        """
         velocity = self.sim.get_base_velocity("object")
         return np.array(velocity)
 
     def get_object_angular_velocity(self) -> np.ndarray:
-        """Get current object angular velocity."""
+        """Get current object angular velocity.
+
+        Returns:
+            np.ndarray: Angular velocity of the object.
+        """
         velocity = self.sim.get_base_angular_velocity("object")
         return np.array(velocity)
 
     def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> float:
+        """Return success or failure.
+
+        Returns:
+            float: Success or failure (1.0 = success, 0.0 = failure).
+        """
         d = distance(achieved_goal, desired_goal)
         return (d < self.distance_threshold).astype(np.float32)
 
     def compute_reward(
         self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict
     ) -> float:
+        """Return reward.
+
+        Returns:
+            float: The reward for a particular action.
+        """
         d = distance(achieved_goal, desired_goal)
         if self.reward_type == "sparse":
             return (d < self.distance_threshold).astype(np.float32) - 1.0

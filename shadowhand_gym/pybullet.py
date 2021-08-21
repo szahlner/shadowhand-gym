@@ -64,7 +64,11 @@ class PyBullet:
 
     @property
     def dt(self) -> float:
-        """Timestep."""
+        """Timestep.
+
+        Returns:
+            float: Timestep.
+        """
         return self.timestep * self.n_substeps
 
     def step(self) -> None:
@@ -675,15 +679,28 @@ class PyBullet:
     def create_object(
         self,
         body_name: str,
-        mass: float,
         object_path: str,
         texture_path: str,
+        mass: float = 0.0,
         position: Optional[List[float]] = None,
         orientation: Optional[List[float]] = None,
         rgba_color: Optional[List[float]] = None,
         friction: Optional[float] = None,
         mesh_scale: Optional[List[float]] = None,
     ) -> None:
+        """Create an object.
+
+        Args:
+            body_name (str): The name of the body. Must be unique in the sim.
+            object_path (str): Path to the object file.
+            texture_path (str): Path to the texture.
+            mass (float, optional): The mass in kg. Defaults to 0.0.
+            position (List[float]): The cartesian position of the geometry. Defaults to [0.0, 0.0, 0.0].
+            orientation (List[float]): The orientation of the geometry in quaternions. Defaults to [0.0, 0.0, 0.0, 0.1].
+            rgba_color (float, float, float, float): RGBA color.
+            friction (float): Lateral friction.
+            mesh_scale (List[float]): Scale of the mesh in x, y and z direction. Defaults to [1.0, 1.0, 1.0].
+        """
         if position is None:
             position = [0.0] * 3
 

@@ -1,44 +1,41 @@
 import os
-from abc import ABC
-
 import numpy as np
-
-from gym import spaces
 
 from shadowhand_gym.envs.core import PyBulletRobot, get_data_path
 from shadowhand_gym.pybullet import PyBullet
 
-
 from typing import List, Optional
+from gym import spaces
+from abc import ABC
 
 
 class ShadowHand(PyBulletRobot, ABC):
 
     JOINT_INDICES = [
-        1,
-        2,  # b"rh_WRJ2", b"rh_WRJ1"
-        3,
-        4,
-        5,
-        6,  # b"rh_FFJ4", b"rh_FFJ3", b"rh_FFJ2", b"rh_FFJ1"
-        8,
-        9,
-        10,
-        11,  # b"rh_MFJ4", b"rh_MFJ3", b"rh_MFJ2", b"rh_MFJ1"
-        13,
-        14,
-        15,
-        16,  # b"rh_RFJ4", b"rh_RFJ3", b"rh_RFJ2", b"rh_RFJ1"
-        18,
-        19,
-        20,
-        21,
-        22,  # b"rh_LFJ5", b"rh_LFJ4", b"rh_LFJ3", b"rh_LFJ2", b"rh_LFJ1"
-        24,
-        25,
-        26,
-        27,
-        28,  # b"rh_THJ5", b"rh_THJ4", b"rh_THJ3", b"rh_THJ2", b"rh_THJ1"
+        1,  # b"rh_WRJ2"
+        2,  # b"rh_WRJ1"
+        3,  # b"rh_FFJ4"
+        4,  # b"rh_FFJ3"
+        5,  # b"rh_FFJ2"
+        6,  # b"rh_FFJ1"
+        8,  # b"rh_MFJ4"
+        9,  # b"rh_MFJ3"
+        10,  # b"rh_MFJ2"
+        11,  # b"rh_MFJ1"
+        13,  # b"rh_RFJ4"
+        14,  # b"rh_RFJ3"
+        15,  # b"rh_RFJ2"
+        16,  # b"rh_RFJ1"
+        18,  # b"rh_LFJ5"
+        19,  # b"rh_LFJ4"
+        20,  # b"rh_LFJ3"
+        21,  # b"rh_LFJ2"
+        22,  # b"rh_LFJ1"
+        24,  # b"rh_THJ5"
+        25,  # b"rh_THJ4"
+        26,  # b"rh_THJ3"
+        27,  # b"rh_THJ2"
+        28,  # b"rh_THJ1"
     ]
 
     COUPLED_JOINTS = {
@@ -49,57 +46,57 @@ class ShadowHand(PyBulletRobot, ABC):
     }
 
     JOINT_FORCES = [
-        150,
-        150,  # b"rh_WRJ2", b"rh_WRJ1"
-        150,
-        150,
-        150,
-        150,  # b"rh_FFJ4", b"rh_FFJ3", b"rh_FFJ2", b"rh_FFJ1"
-        150,
-        150,
-        150,
-        150,  # b"rh_MFJ4", b"rh_MFJ3", b"rh_MFJ2", b"rh_MFJ1"
-        150,
-        150,
-        150,
-        150,  # b"rh_RFJ4", b"rh_RFJ3", b"rh_RFJ2", b"rh_RFJ1"
-        150,
-        150,
-        150,
-        150,
-        150,  # b"rh_LFJ5", b"rh_LFJ4", b"rh_LFJ3", b"rh_LFJ2", b"rh_LFJ1"
-        150,
-        150,
-        150,
-        150,
-        150,  # b"rh_THJ5", b"rh_THJ4", b"rh_THJ3", b"rh_THJ2", b"rh_THJ1"
+        150,  # b"rh_WRJ2"
+        150,  # b"rh_WRJ1"
+        150,  # b"rh_FFJ4"
+        150,  # b"rh_FFJ3"
+        150,  # b"rh_FFJ2"
+        150,  # b"rh_FFJ1"
+        150,  # b"rh_MFJ4"
+        150,  # b"rh_MFJ3"
+        150,  # b"rh_MFJ2"
+        150,  # b"rh_MFJ1"
+        150,  # b"rh_RFJ4"
+        150,  # b"rh_RFJ3"
+        150,  # b"rh_RFJ2"
+        150,  # b"rh_RFJ1"
+        150,  # b"rh_LFJ5"
+        150,  # b"rh_LFJ4"
+        150,  # b"rh_LFJ3"
+        150,  # b"rh_LFJ2"
+        150,  # b"rh_LFJ1"
+        150,  # b"rh_THJ5"
+        150,  # b"rh_THJ4"
+        150,  # b"rh_THJ3"
+        150,  # b"rh_THJ2"
+        150,  # b"rh_THJ1"
     ]
 
     NEUTRAL_JOINT_VALUES = [
-        -0.06,
-        0.09,  # b"rh_WRJ2", b"rh_WRJ1"
-        -0.06,
-        0.0,
-        0.53,
-        0.53,  # b"rh_FFJ4", b"rh_FFJ3", b"rh_FFJ2", b"rh_FFJ1"
-        0.02,
-        0.0,
-        0.54,
-        0.54,  # b"rh_MFJ4", b"rh_MFJ3", b"rh_MFJ2", b"rh_MFJ1"
-        -0.06,
-        0.0,
-        0.54,
-        0.54,  # b"rh_RFJ4", b"rh_RFJ3", b"rh_RFJ2", b"rh_RFJ1"
-        0.0,
-        -0.22,
-        0.0,
-        0.54,
-        0.54,  # b"rh_LFJ5", b"rh_LFJ4", b"rh_LFJ3", b"rh_LFJ2", b"rh_LFJ1"
-        1.05,
-        0.49,
-        0.21,
-        -0.02,
-        0.28,  # b"rh_THJ5", b"rh_THJ4", b"rh_THJ3", b"rh_THJ2", b"rh_THJ1"
+        -0.06,  # b"rh_WRJ2"
+        0.09,  # b"rh_WRJ1"
+        -0.06,  # b"rh_FFJ4"
+        0.0,  # b"rh_FFJ3"
+        0.53,  # b"rh_FFJ2"
+        0.53,  # b"rh_FFJ1"
+        0.02,  # b"rh_MFJ4"
+        0.0,  # b"rh_MFJ3"
+        0.54,  # b"rh_MFJ2"
+        0.54,  # b"rh_MFJ1"
+        -0.06,  # b"rh_RFJ4"
+        0.0,  # b"rh_RFJ3"
+        0.54,  # b"rh_RFJ2"
+        0.54,  # b"rh_RFJ1"
+        0.0,  # b"rh_LFJ5"
+        -0.22,  # b"rh_LFJ4"
+        0.0,  # b"rh_LFJ3"
+        0.54,  # b"rh_LFJ2"
+        0.54,  # b"rh_LFJ1"
+        1.05,  # b"rh_THJ5"
+        0.49,  # b"rh_THJ4"
+        0.21,  # b"rh_THJ3"
+        -0.02,  # b"rh_THJ2"
+        0.28,  # b"rh_THJ1"
     ]
 
     FINGERTIP_LINKS = [7, 12, 17, 23, 29]
@@ -114,6 +111,16 @@ class ShadowHand(PyBulletRobot, ABC):
         position_gain: Optional[float] = None,
         finger_friction: Optional[List[float]] = None,
     ) -> None:
+        """Shadow dexterous hand robot.
+
+        Args:
+            sim (PyBullet): PyBullet client to interact with the simulator.
+            base_position (List[float], optional): Cartesian base position of the robot. Defaults to [0.0, 0.0, 0.0].
+            base_orientation (List[float], optional): Base orientation of the robot in quaternions.
+                Defaults to [0.0, 0.0, 0.0, 1.0]
+            position_gain (float, optional): Position gain for the motors (actuators) in the robot. Defaults to 0.02.
+            finger_friction (float, optional): Lateral friction of the robot (all parts). Defaults to 1.0.
+        """
         if base_position is None:
             base_position = [0.0] * 3
 
@@ -148,6 +155,11 @@ class ShadowHand(PyBulletRobot, ABC):
             )
 
     def set_action(self, action: np.ndarray) -> None:
+        """Set action.
+
+        Args:
+            action (np.ndarray): Action to be set.
+        """
         # Ensure action does not get changed
         action = action.copy()
         action = action.flatten()
@@ -171,15 +183,24 @@ class ShadowHand(PyBulletRobot, ABC):
 
         self.control_joints(action)
 
-    def get_obs(self):
+    def get_obs(self) -> np.ndarray:
+        """Return robot specific observations.
+
+        Returns:
+            np.ndarray: Robot joint positions and velocities.
+        """
         positions = self.get_positions()
         velocities = self.get_velocities()
         obs = np.concatenate([positions, velocities])
 
         return obs
 
-    def get_positions(self):
-        """Returns the joint positions."""
+    def get_positions(self) -> np.ndarray:
+        """Returns the joint positions.
+
+        Returns:
+            np.ndarray: Robot joint positions.
+        """
         positions = []
 
         for joint in self.JOINT_INDICES:
@@ -187,8 +208,12 @@ class ShadowHand(PyBulletRobot, ABC):
 
         return np.array(positions)
 
-    def get_velocities(self):
-        """Returns the joint velocities."""
+    def get_velocities(self) -> np.ndarray:
+        """Returns the joint velocities.
+
+        Returns:
+            np.ndarray: Robot joint velocities.
+        """
         velocities = []
 
         for joint in self.JOINT_INDICES:
@@ -196,7 +221,12 @@ class ShadowHand(PyBulletRobot, ABC):
 
         return np.array(velocities)
 
-    def get_fingertip_positions(self):
+    def get_fingertip_positions(self) -> np.ndarray:
+        """Returns the fingertip positions.
+
+        Returns:
+            np.ndarray: Cartesian fingertip positions.
+        """
         positions = []
 
         for joint in self.FINGERTIP_LINKS:
@@ -204,15 +234,21 @@ class ShadowHand(PyBulletRobot, ABC):
 
         return np.array(positions)
 
-    def get_palm_position(self):
+    def get_palm_position(self) -> np.ndarray:
+        """Returns palm position.
+
+        Returns:
+            np.ndarray: Cartesian position of the hand palm.
+        """
         position = self.get_link_position(self.PALM_LINK)
 
         return np.array(position)
 
-    def reset(self):
+    def reset(self) -> None:
+        """Resets the robot."""
         self.set_joint_neutral()
 
-    def set_joint_neutral(self):
+    def set_joint_neutral(self) -> None:
         """Set the robot to its neutral pose."""
         self.set_joint_values(self.NEUTRAL_JOINT_VALUES)
 

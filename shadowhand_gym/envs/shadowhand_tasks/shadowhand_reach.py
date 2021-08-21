@@ -17,8 +17,10 @@ class ShadowHandReachEnv(RobotTaskEnv, ABC):
 
         Args:
             render (bool, optional): Activate rendering. Defaults to False.
-            reward_type (str, optional): 'sparse' or 'dense'. Defaults to 'sparse'.
-
+            reward_type (str, optional): Choose from 'sparse' or 'dense'. Defaults to 'sparse'.
+            difficult_mode (str, optional): Choose from 'easy' or 'hard'. Defaults to 'easy'.
+                'easy': only choose between one of the 4 given fingertip positions.
+                'hard': choose between all of the 4 given fingertip positions (per finger).
         """
         self.sim = PyBullet(render=render)
         self.robot = ShadowHand(

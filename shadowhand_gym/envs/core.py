@@ -1,15 +1,20 @@
 import os
-from abc import ABC
-
 import numpy as np
 import gym
 
-from gym import utils, spaces
-from typing import List, Tuple
 from shadowhand_gym.pybullet import PyBullet
 
+from gym import utils, spaces
+from typing import List, Tuple, Union
+from abc import ABC
 
-def get_data_path():
+
+def get_data_path() -> str:
+    """Return the absolute data path.
+
+    Returns:
+        str: Absolute data path.
+    """
     data_path = os.path.join(os.path.dirname(__file__))
     return data_path
 
@@ -66,7 +71,7 @@ class PyBulletRobot:
             useFixedBase=True,
         )
 
-    def setup(self) -> None:
+    def setup(self):
         """Called once in the constructor."""
         pass
 
@@ -148,7 +153,7 @@ class RobotTaskEnv(gym.GoalEnv, ABC):
     metadata = {"render.modes": ["human", "rgb_array"]}
 
     def __init__(self):
-        self.seed()  # required for init, can be changed later
+        self.seed()  # Required for init, can be changed later
         obs = self.reset()
 
         observation_shape = obs["observation"].shape
@@ -166,7 +171,13 @@ class RobotTaskEnv(gym.GoalEnv, ABC):
         self.compute_reward = self.task.compute_reward
         self.render = self.sim.render
 
-    def _get_obs(self):
+    def _get_obs(self) -> dict:
+        """Get observations.
+
+        Returns:
+            dict: Current observations.
+                Observation keys: 'observation', 'achieved_goal', 'desired_goal'.
+        """
         robot_obs = self.robot.get_obs()  # robot state
         task_obs = self.task.get_obs()  # object position, velocity, etc.
         observation = np.concatenate([robot_obs, task_obs])
@@ -179,14 +190,20 @@ class RobotTaskEnv(gym.GoalEnv, ABC):
             "desired_goal": self.task.get_goal(),
         }
 
-    def reset(self):
+    def reset(self) -> dict:
+        """Reset simulation.
+
+        Returns:
+            dict: Observations after reset.
+                Observation keys: 'observation', 'achieved_goal', 'desired_goal'.
+        """
         with self.sim.no_rendering():
             self.robot.reset()
             self.task.reset()
 
         return self._get_obs()
 
-    def step(self, action):
+    def step(self, action) -> Tuple[dict, float, Union[float, bool], dict]:
         self.robot.set_action(action)
         self.sim.step()
 
@@ -203,11 +220,19 @@ class RobotTaskEnv(gym.GoalEnv, ABC):
 
         return obs, reward, done, info
 
-    def seed(self, seed=None):
-        """Setup the seed."""
+    def seed(self, seed=None) -> int:
+        """Setup the seed.
+
+        Args:
+            seed (int, optional): Seed.
+
+        Returns:
+            int: Seed.
+        """
         return self.task.seed(seed)
 
-    def close(self):
+    def close(self) -> None:
+        """Close simulation."""
         self.sim.close()
 
 
