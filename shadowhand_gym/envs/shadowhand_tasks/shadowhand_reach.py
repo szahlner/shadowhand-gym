@@ -7,7 +7,12 @@ from shadowhand_gym.envs.tasks import Reach
 
 
 class ShadowHandReachEnv(RobotTaskEnv, ABC):
-    def __init__(self, render: bool = False, reward_type: str = "sparse", difficult_mode: str = "easy") -> None:
+    def __init__(
+        self,
+        render: bool = False,
+        reward_type: str = "sparse",
+        difficult_mode: str = "easy",
+    ) -> None:
         """Reach task with Shadow Dexterous Hand robot.
 
         Args:
@@ -21,5 +26,10 @@ class ShadowHandReachEnv(RobotTaskEnv, ABC):
             base_position=[0.0, 0.0, 0.0],
             base_orientation=[0.5, -0.5, 0.5, -0.5],
         )
-        self.task = Reach(sim=self.sim, robot=self.robot, reward_type=reward_type, difficult_mode=difficult_mode)
+        self.task = Reach(
+            sim=self.sim,
+            robot=self.robot,
+            reward_type=reward_type,
+            difficult_mode=difficult_mode,
+        )
         RobotTaskEnv.__init__(self)

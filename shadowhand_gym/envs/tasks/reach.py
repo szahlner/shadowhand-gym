@@ -62,10 +62,16 @@ class Reach(Task):
         robot: ShadowHand,
         reward_type: str = "sparse",
         distance_threshold: float = 0.05,
-        difficult_mode: str = "easy"
+        difficult_mode: str = "easy",
     ) -> None:
-        assert reward_type in ["dense", "sparse"], "Reward type must be 'dense' or 'sparse'"
-        assert difficult_mode in ["easy", "hard"], "Difficult mode must be in 'easy' or 'hard'"
+        assert reward_type in [
+            "dense",
+            "sparse",
+        ], "Reward type must be 'dense' or 'sparse'"
+        assert difficult_mode in [
+            "easy",
+            "hard",
+        ], "Difficult mode must be in 'easy' or 'hard'"
 
         self.sim = sim
         self.robot = robot
@@ -151,11 +157,13 @@ class Reach(Task):
         )
         goal = np.array(self.GOAL_POSITIONS[goal_choice])
 
-        if self.difficult_mode == 'hard':
+        if self.difficult_mode == "hard":
             # Difficult mode: hard
             # Choose between all of the 4 given fingertip positions (per finger)
             for n in range(5):
-                goal_choice = self.np_random.choice([k for k in range(len(self.GOAL_POSITIONS))])
+                goal_choice = self.np_random.choice(
+                    [k for k in range(len(self.GOAL_POSITIONS))]
+                )
                 goal[n] = np.array(self.GOAL_POSITIONS[goal_choice][n])
 
         if self.np_random.uniform() < 0.1:
@@ -167,7 +175,9 @@ class Reach(Task):
         d = distance(achieved_goal, desired_goal)
         return (d < self.distance_threshold).astype(np.float32)
 
-    def compute_reward(self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict) -> float:
+    def compute_reward(
+        self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict
+    ) -> float:
         d = distance(achieved_goal, desired_goal)
         if self.reward_type == "sparse":
             return (d < self.distance_threshold).astype(np.float32) - 1.0

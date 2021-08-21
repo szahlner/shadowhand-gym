@@ -83,7 +83,9 @@ class Block(Task):
         object_angular_velocity = self.get_object_angular_velocity()
         achieved_goal = self.get_achieved_goal()
 
-        observations = np.concatenate([object_velocity, object_angular_velocity, achieved_goal])
+        observations = np.concatenate(
+            [object_velocity, object_angular_velocity, achieved_goal]
+        )
         return observations
 
     def get_achieved_goal(self):
@@ -105,11 +107,15 @@ class Block(Task):
             axis, angle
         )
 
-        self.sim.set_base_pose("object", object_start_position, object_start_orientation)
+        self.sim.set_base_pose(
+            "object", object_start_position, object_start_orientation
+        )
 
     def _sample_goal(self):
         """Randomize goal."""
-        goal_orientation = self.sim.physics_client.getQuaternionFromEuler(self.GOAL_ORIENTATION)
+        goal_orientation = self.sim.physics_client.getQuaternionFromEuler(
+            self.GOAL_ORIENTATION
+        )
         goal_orientation = np.array(goal_orientation)
 
         object_position = self.get_object_position()
@@ -141,7 +147,9 @@ class Block(Task):
         d = distance(achieved_goal, desired_goal)
         return (d < self.distance_threshold).astype(np.float32)
 
-    def compute_reward(self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict) -> float:
+    def compute_reward(
+        self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict
+    ) -> float:
         d = distance(achieved_goal, desired_goal)
         if self.reward_type == "sparse":
             return (d < self.distance_threshold).astype(np.float32) - 1.0
