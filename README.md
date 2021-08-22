@@ -26,7 +26,7 @@ env = gym.make('ShadowHandReach-v1', render=True)
 obs = env.reset()
 done = False
 while not done:
-    # random action
+    # Random action
     action = env.action_space.sample()
     obs, reward, done, info = env.step(action)
 
