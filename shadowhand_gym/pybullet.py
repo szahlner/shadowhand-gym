@@ -408,7 +408,7 @@ class PyBullet:
         Args:
             body_name (str): The name of the body. Must be unique in the sim.
         """
-        # kwargs['flags'] = p.URDF_USE_SELF_COLLISION
+        kwargs['flags'] = p.URDF_USE_SELF_COLLISION
         self._bodies_idx[body_name] = self.physics_client.loadURDF(**kwargs)
 
     def create_box(
