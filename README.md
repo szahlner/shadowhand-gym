@@ -33,16 +33,16 @@ while not done:
 env.close()
 ```
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](./examples/ShadowHandReach-v1_Example.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/szahlner/shadowhand-gym/blob/master/examples/ShadowHandReach-v1_Example.ipynb)
 
 ## Environments
 
 | | |
 | :------------------------------: | :--------------------------------------------: |
 | `ShadowHandReach-v1` **easy mode** | `ShadowHandReach-v1` **hard mode** |
-| ![ShadowHandReach-v1 easy](./docs/ShadowHandReach-v1_easy.gif) | ![ShadowHandReach-v1_hard](./docs/ShadowHandReach-v1_hard.gif) |
+| ![ShadowHandReach-v1 easy](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1_easy.gif) | ![ShadowHandReach-v1_hard](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1_hard.gif) |
 | `ShadowHandBlock-v1` **orientation only** | |
-| ![ShadowHandBlock-v1](./docs/ShadowHandBlock-v1.gif) | |
+| ![ShadowHandBlock-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandBlock-v1.gif) | |
 
 Environments are widely inspired from [OpenAI ShadowHand environments](https://openai.com/blog/ingredients-for-robotics-research/).  
 Code is inspired from [qgallouedec's panda-gym](https://github.com/qgallouedec/panda-gym).
