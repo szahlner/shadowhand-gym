@@ -1,7 +1,7 @@
 # shadowhand-gym
 
 OpenaAI Gym Shadow Dexterous Hand robot environment based on PyBullet.  
-(Successor of [Old gym environment](https://rgit.acin.tuwien.ac.at/matthias.hirschmanner/shadow_teleop/).)
+Successor of the [old Shadow Dexterous Hand robot gym environment](https://rgit.acin.tuwien.ac.at/matthias.hirschmanner/shadow_teleop/-/tree/master/gym_environments).
 
 [![GitHub](https://img.shields.io/github/license/szahlner/shadowhand-gym.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
