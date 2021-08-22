@@ -33,7 +33,7 @@ while not done:
 env.close()
 ```
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](./examples/ShadowHandReachExample.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](./examples/ShadowHandReach-v1_Example.ipynb)
 
 ## Environments
 
