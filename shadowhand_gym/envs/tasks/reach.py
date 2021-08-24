@@ -61,7 +61,7 @@ class Reach(Task):
         sim: PyBullet,
         robot: ShadowHand,
         reward_type: str = "sparse",
-        distance_threshold: float = 0.05,
+        distance_threshold: float = 0.01,
         difficult_mode: str = "easy",
     ) -> None:
         """Shadow dexterous hand reach task.
