@@ -44,6 +44,8 @@ env.close()
 | `ShadowHandBlock-v1` **orientation only** | |
 | ![ShadowHandBlock-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandBlock-v1.gif) | |
 
+## Credits
+
 Environments are widely inspired from [OpenAI ShadowHand environments](https://openai.com/blog/ingredients-for-robotics-research/).  
 Code is inspired from [qgallouedec's panda-gym](https://github.com/qgallouedec/panda-gym).  
 Robot base URDF file from [Tadinu's my_arm](https://github.com/Tadinu/my_arm). 
