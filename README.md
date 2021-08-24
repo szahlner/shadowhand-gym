@@ -1,6 +1,6 @@
 # shadowhand-gym
 
-OpenaAI Gym Shadow Dexterous Hand robot environment based on PyBullet.  
+OpenaAI Gym [Shadow Dexterous Hand](https://www.shadowrobot.com/dexterous-hand-series/) robot environment based on [PyBullet](https://pybullet.org).  
 Successor of the [old Shadow Dexterous Hand robot gym environment](https://rgit.acin.tuwien.ac.at/matthias.hirschmanner/shadow_teleop/-/tree/master/gym_environments).
 
 [![GitHub](https://img.shields.io/github/license/szahlner/shadowhand-gym.svg)](LICENSE)
@@ -45,4 +45,5 @@ env.close()
 | ![ShadowHandBlock-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandBlock-v1.gif) | |
 
 Environments are widely inspired from [OpenAI ShadowHand environments](https://openai.com/blog/ingredients-for-robotics-research/).  
-Code is inspired from [qgallouedec's panda-gym](https://github.com/qgallouedec/panda-gym).
+Code is inspired from [qgallouedec's panda-gym](https://github.com/qgallouedec/panda-gym).  
+Robot base URDF file from [Tadinu's my_arm](https://github.com/Tadinu/my_arm). 

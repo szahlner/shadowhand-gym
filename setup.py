@@ -7,10 +7,10 @@ with open("README.md", "r") as f:
 setup(
     name="shadowhand_gym",
     description="OpenAI Gym Shadow Dexterous Hand robot environment based on PyBullet.",
-    author="zahlners",
+    author="szahlner",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/zahlners/shadowhand-gym",
+    url="https://github.com/szahlner/shadowhand-gym",
     packages=find_packages(),
     include_package_data=True,
     package_data={},
