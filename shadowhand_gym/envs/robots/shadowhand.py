@@ -12,94 +12,154 @@ from abc import ABC
 class ShadowHand(PyBulletRobot, ABC):
 
     JOINT_INDICES = [
-        1,  # b"rh_WRJ2"
-        2,  # b"rh_WRJ1"
-        3,  # b"rh_FFJ4"
-        4,  # b"rh_FFJ3"
-        5,  # b"rh_FFJ2"
-        6,  # b"rh_FFJ1"
-        8,  # b"rh_MFJ4"
-        9,  # b"rh_MFJ3"
-        10,  # b"rh_MFJ2"
-        11,  # b"rh_MFJ1"
-        13,  # b"rh_RFJ4"
-        14,  # b"rh_RFJ3"
-        15,  # b"rh_RFJ2"
-        16,  # b"rh_RFJ1"
-        18,  # b"rh_LFJ5"
-        19,  # b"rh_LFJ4"
-        20,  # b"rh_LFJ3"
-        21,  # b"rh_LFJ2"
-        22,  # b"rh_LFJ1"
-        24,  # b"rh_THJ5"
-        25,  # b"rh_THJ4"
-        26,  # b"rh_THJ3"
-        27,  # b"rh_THJ2"
-        28,  # b"rh_THJ1"
+        1,  # rh_WRJ2
+        2,  # rh_WRJ1
+        3,  # rh_FFJ4
+        4,  # rh_FFJ3
+        5,  # rh_FFJ2
+        6,  # rh_FFJ1
+        8,  # rh_MFJ4
+        9,  # rh_MFJ3
+        10,  # rh_MFJ2
+        11,  # rh_MFJ1
+        13,  # rh_RFJ4
+        14,  # rh_RFJ3
+        15,  # rh_RFJ2
+        16,  # rh_RFJ1
+        18,  # rh_LFJ5
+        19,  # rh_LFJ4
+        20,  # rh_LFJ3
+        21,  # rh_LFJ2
+        22,  # rh_LFJ1
+        24,  # rh_THJ5
+        25,  # rh_THJ4
+        26,  # rh_THJ3
+        27,  # rh_THJ2
+        28,  # rh_THJ1
     ]
 
     COUPLED_JOINTS = {
-        6: 5,  # b"rh_FFJ1": b"rh_FFJ2"
-        11: 10,  # b"rh_MFJ1": b"rh_MFJ2"
-        16: 15,  # b"rh_RFJ1": b"rh_RFJ2"
-        22: 21,  # b"rh_LFJ1": b"rh_LFJ2"
+        6: 5,  # rh_FFJ1: rh_FFJ2
+        11: 10,  # rh_MFJ1: rh_MFJ2
+        16: 15,  # rh_RFJ1: rh_RFJ2
+        22: 21,  # rh_LFJ1: rh_LFJ2
     }
 
     JOINT_FORCES = [
-        150,  # b"rh_WRJ2"
-        150,  # b"rh_WRJ1"
-        150,  # b"rh_FFJ4"
-        150,  # b"rh_FFJ3"
-        150,  # b"rh_FFJ2"
-        150,  # b"rh_FFJ1"
-        150,  # b"rh_MFJ4"
-        150,  # b"rh_MFJ3"
-        150,  # b"rh_MFJ2"
-        150,  # b"rh_MFJ1"
-        150,  # b"rh_RFJ4"
-        150,  # b"rh_RFJ3"
-        150,  # b"rh_RFJ2"
-        150,  # b"rh_RFJ1"
-        150,  # b"rh_LFJ5"
-        150,  # b"rh_LFJ4"
-        150,  # b"rh_LFJ3"
-        150,  # b"rh_LFJ2"
-        150,  # b"rh_LFJ1"
-        150,  # b"rh_THJ5"
-        150,  # b"rh_THJ4"
-        150,  # b"rh_THJ3"
-        150,  # b"rh_THJ2"
-        150,  # b"rh_THJ1"
+        150,  # rh_WRJ2
+        150,  # rh_WRJ1
+        150,  # rh_FFJ4
+        150,  # rh_FFJ3
+        150,  # rh_FFJ2
+        150,  # rh_FFJ1
+        150,  # rh_MFJ4
+        150,  # rh_MFJ3
+        150,  # rh_MFJ2
+        150,  # rh_MFJ1
+        150,  # rh_RFJ4
+        150,  # rh_RFJ3
+        150,  # rh_RFJ2
+        150,  # rh_RFJ1
+        150,  # rh_LFJ5
+        150,  # rh_LFJ4
+        150,  # rh_LFJ3
+        150,  # rh_LFJ2
+        150,  # rh_LFJ1
+        150,  # rh_THJ5
+        150,  # rh_THJ4
+        150,  # rh_THJ3
+        150,  # rh_THJ2
+        150,  # rh_THJ1
+    ]
+
+    JOINT_LOWER_LIMIT = [
+        -0.524,  # rh_WRJ2
+        -0.698,  # rh_WRJ1
+        -0.349,  # rh_FFJ4
+        0.0,  # rh_FFJ3
+        0.0,  # rh_FFJ2
+        0.0,  # rh_FFJ1
+        0.349,  # rh_MFJ4
+        0.0,  # rh_MFJ3
+        0.0,  # rh_MFJ2
+        0.0,  # rh_MFJ1
+        0.349,  # rh_RFJ4
+        0.0,  # rh_RFJ3
+        0.0,  # rh_RFJ2
+        0.0,  # rh_RFJ1
+        0.0,  # rh_LFJ5
+        -0.349,  # rh_LFJ4
+        0.0,  # rh_LFJ3
+        0.0,  # rh_LFJ2
+        0.0,  # rh_LFJ1
+        -1.047,  # rh_THJ5
+        0.0,  # rh_THJ4
+        -0.209,  # rh_THJ3
+        -0.698,  # rh_THJ2
+        0.0,  # rh_THJ1
+    ]
+
+    JOINT_UPPER_LIMIT = [
+        0.175,  # rh_WRJ2
+        0.489,  # rh_WRJ1
+        0.349,  # rh_FFJ4
+        1.571,  # rh_FFJ3
+        1.571,  # rh_FFJ2
+        1.571,  # rh_FFJ1
+        0.349,  # rh_MFJ4
+        1.571,  # rh_MFJ3
+        1.571,  # rh_MFJ2
+        1.571,  # rh_MFJ1
+        0.349,  # rh_RFJ4
+        1.571,  # rh_RFJ3
+        1.571,  # rh_RFJ2
+        1.571,  # rh_RFJ1
+        0.785,  # rh_LFJ5
+        0.349,  # rh_LFJ4
+        1.571,  # rh_LFJ3
+        1.571,  # rh_LFJ2
+        1.571,  # rh_LFJ1
+        1.047,  # rh_THJ5
+        1.222,  # rh_THJ4
+        0.209,  # rh_THJ3
+        0.698,  # rh_THJ2
+        1.571,  # rh_THJ1
     ]
 
     NEUTRAL_JOINT_VALUES = [
-        -0.06,  # b"rh_WRJ2"
-        0.09,  # b"rh_WRJ1"
-        -0.06,  # b"rh_FFJ4"
-        0.0,  # b"rh_FFJ3"
-        0.53,  # b"rh_FFJ2"
-        0.53,  # b"rh_FFJ1"
-        0.02,  # b"rh_MFJ4"
-        0.0,  # b"rh_MFJ3"
-        0.54,  # b"rh_MFJ2"
-        0.54,  # b"rh_MFJ1"
-        -0.06,  # b"rh_RFJ4"
-        0.0,  # b"rh_RFJ3"
-        0.54,  # b"rh_RFJ2"
-        0.54,  # b"rh_RFJ1"
-        0.0,  # b"rh_LFJ5"
-        -0.22,  # b"rh_LFJ4"
-        0.0,  # b"rh_LFJ3"
-        0.54,  # b"rh_LFJ2"
-        0.54,  # b"rh_LFJ1"
-        1.05,  # b"rh_THJ5"
-        0.49,  # b"rh_THJ4"
-        0.21,  # b"rh_THJ3"
-        -0.02,  # b"rh_THJ2"
-        0.28,  # b"rh_THJ1"
+        -0.06,  # rh_WRJ2
+        0.09,  # rh_WRJ1
+        -0.06,  # rh_FFJ4
+        0.0,  # rh_FFJ3
+        0.53,  # rh_FFJ2
+        0.53,  # rh_FFJ1
+        0.02,  # rh_MFJ4
+        0.0,  # rh_MFJ3
+        0.54,  # rh_MFJ2
+        0.54,  # rh_MFJ1
+        -0.06,  # rh_RFJ4
+        0.0,  # rh_RFJ3
+        0.54,  # rh_RFJ2
+        0.54,  # rh_RFJ1
+        0.0,  # rh_LFJ5
+        -0.22,  # rh_LFJ4
+        0.0,  # rh_LFJ3
+        0.54,  # rh_LFJ2
+        0.54,  # rh_LFJ1
+        1.05,  # rh_THJ5
+        0.49,  # rh_THJ4
+        0.21,  # rh_THJ3
+        -0.02,  # rh_THJ2
+        0.28,  # rh_THJ1
     ]
 
-    FINGERTIP_LINKS = [7, 12, 17, 23, 29]
+    FINGERTIP_LINKS = [
+        7,  # rh_FFtip
+        12,  # rh_MFtip
+        17,  # rh_RFtip
+        23,  # rh_LFtip
+        29,  # rh_thtip
+    ]
 
     PALM_LINK = 2
 
@@ -149,6 +209,11 @@ class ShadowHand(PyBulletRobot, ABC):
             base_orientation=base_orientation,
         )
 
+        joint_lower_limit = np.array(self.JOINT_LOWER_LIMIT)
+        joint_upper_limit = np.array(self.JOINT_UPPER_LIMIT)
+        self.action_range = (joint_upper_limit - joint_lower_limit) / 2.0
+        self.action_center = (joint_upper_limit + joint_lower_limit) / 2.0
+
         for n in range(len(self.FINGERTIP_LINKS)):
             self.sim.set_friction(
                 self.body_name, self.FINGERTIP_LINKS[n], finger_friction[n]
@@ -181,7 +246,13 @@ class ShadowHand(PyBulletRobot, ABC):
 
             action = positions
 
-        self.control_joints(action)
+        # Map [-1.0, 1.0] -> [joint_min, joint_max]
+        joint_control = self.action_center + self.action_range * action
+        joint_control = np.clip(
+            joint_control, self.JOINT_LOWER_LIMIT, self.JOINT_UPPER_LIMIT
+        )
+
+        self.control_joints(joint_control)
 
     def get_obs(self) -> np.ndarray:
         """Return robot specific observations.
