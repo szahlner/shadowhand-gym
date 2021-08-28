@@ -39,7 +39,7 @@ env.close()
 
 | | |
 | :------------------------------: | :--------------------------------------------: |
-| `ShadowHandReach-v1` **easy mode** | `ShadowHandReach-v1` **hard mode** |
+| `ShadowHandReach-v1` **easy** | `ShadowHandReach-v1` **hard** |
 | ![ShadowHandReach-v1 easy](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1_easy.gif) | ![ShadowHandReach-v1_hard](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1_hard.gif) |
 | `ShadowHandBlock-v1` **orientation only** | |
 | ![ShadowHandBlock-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandBlock-v1.gif) | |
