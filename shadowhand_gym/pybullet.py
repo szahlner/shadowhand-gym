@@ -24,10 +24,10 @@ class PyBullet:
             render (bool, optional): Enable rendering. Defaults to False.
             n_substeps (int, optional): Number of sim substep when step() is called. Defaults to 20.
             position_gain (float, optional): Positional gain to control the joints. Defaults to 0.02.
-            background_color (List[int], optional): Simulator background color [R, G, B]. Defaults to [116, 160, 216].
+            background_color (List[int], optional): Simulator background color [R, G, B]. Defaults to [210, 200, 190].
         """
         if background_color is None:
-            background_color = [116, 160, 216]
+            background_color = [210, 200, 190]
         assert len(background_color) == 3, "Background color must be a list of 3 values"
 
         self.render_enabled = render
@@ -408,7 +408,7 @@ class PyBullet:
         Args:
             body_name (str): The name of the body. Must be unique in the sim.
         """
-        kwargs['flags'] = p.URDF_USE_SELF_COLLISION
+        kwargs["flags"] = p.URDF_USE_SELF_COLLISION
         self._bodies_idx[body_name] = self.physics_client.loadURDF(**kwargs)
 
     def create_box(
