@@ -162,4 +162,4 @@ rot.py
 enjoy.py
 
 # Gitignore
-.gitignore
+*.gitignore
