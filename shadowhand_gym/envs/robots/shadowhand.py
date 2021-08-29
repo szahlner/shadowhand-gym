@@ -237,14 +237,12 @@ class ShadowHand(PyBulletRobot, ABC):
             n = 0
             for joint in self.JOINT_INDICES:
                 if joint in keys:
-                    positions.append(
-                        action[self.JOINT_INDICES.index(self.COUPLED_JOINTS[joint])]
-                    )
+                    positions.append(action[n - 1])
                 else:
                     positions.append(action[n])
                     n += 1
 
-            action = positions
+            action = np.array(positions)
 
         # Map [-1.0, 1.0] -> [joint_min, joint_max]
         joint_control = self.action_center + self.action_range * action
