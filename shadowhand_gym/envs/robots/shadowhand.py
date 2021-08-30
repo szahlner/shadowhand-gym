@@ -145,6 +145,7 @@ class ShadowHand(PyBulletRobot, ABC):
             elif joint_name in COUPLED_JOINTS:
                 self.JOINTS_COUPLED.append(n)
             elif joint_name in FINGER_TIPS:
+                # The fingertip actually is a joint in the URDF file
                 self.FINGERTIP_LINKS.append(n)
 
         self.JOINTS_LIMIT_LOW = np.array(self.JOINTS_LIMIT_LOW)
@@ -163,7 +164,7 @@ class ShadowHand(PyBulletRobot, ABC):
         action = action.copy().flatten()
         action = np.clip(action, self.action_space.low, self.action_space.high)
 
-        # Map to real action [-1.0, 1.0] -> [action.min, action.max]
+        # Map to real actions [-1.0, 1.0] -> [action.min, action.max]
         ctrl = self.ACT_CENTER + self.ACT_RANGE * action
         ctrl = np.clip(ctrl, self.JOINTS_LIMIT_LOW, self.JOINTS_LIMIT_HIGH)
 
@@ -252,6 +253,9 @@ class ShadowHand(PyBulletRobot, ABC):
         """Resets the robot."""
         self.set_joint_neutral()
 
+        # Let the neutral pose settle in
+        self.sim.step()
+
     def set_joint_neutral(self) -> None:
         """Set the robot to its neutral pose."""
         joint_indices, joint_positions = [], []
@@ -265,6 +269,4 @@ class ShadowHand(PyBulletRobot, ABC):
 
             joint_indices.append(n)
 
-        self.set_joint_positions(
-            joint_indices=joint_indices, positions=joint_positions
-        )
+        self.set_joint_positions(joint_indices=joint_indices, positions=joint_positions)
