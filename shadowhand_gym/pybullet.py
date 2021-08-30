@@ -411,6 +411,53 @@ class PyBullet:
         kwargs["flags"] = p.URDF_USE_SELF_COLLISION
         self._bodies_idx[body_name] = self.physics_client.loadURDF(**kwargs)
 
+    def get_num_joints(self, body_name: str) -> int:
+        """Get total number of joints in the robot.
+
+        Args:
+            body_name (str): The name of the body. Must be unique in the sim.
+
+        Returns:
+            int: Total number of joints in the robot.
+        """
+        return self.physics_client.getNumJoints(self._bodies_idx[body_name])
+
+    def get_joint_lower_limit(self, body: str, joint: int) -> float:
+        """Get the lower limit of the joint of the body.
+
+        Args:
+            body (str): Body unique name.
+            joint (int): Joint index in the body.
+
+        Returns:
+            float: The lower limit of the joint.
+        """
+        return self.physics_client.getJointInfo(self._bodies_idx[body], joint)[8]
+
+    def get_joint_upper_limit(self, body: str, joint: int) -> float:
+        """Get the upper limit of the joint of the body.
+
+        Args:
+            body (str): Body unique name.
+            joint (int): Joint index in the body.
+
+        Returns:
+            float: The upper limit of the joint.
+        """
+        return self.physics_client.getJointInfo(self._bodies_idx[body], joint)[9]
+
+    def get_joint_name(self, body: str, joint: int) -> str:
+        """Get the name of the joint of the body.
+
+        Args:
+            body (str): Body unique name.
+            joint (int): Joint index in the body.
+
+        Returns:
+            str: The name of the joint.
+        """
+        return self.physics_client.getJointInfo(self._bodies_idx[body], joint)[1]
+
     def create_box(
         self,
         body_name: str,

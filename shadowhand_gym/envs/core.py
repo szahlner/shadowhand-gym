@@ -5,7 +5,7 @@ import gym
 from shadowhand_gym.pybullet import PyBullet
 
 from gym import utils, spaces
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 from abc import ABC
 
 
@@ -131,20 +131,73 @@ class PyBulletRobot:
         """
         return self.sim.get_link_velocity(self.body_name, link)
 
-    def control_joints(self, target_positions: List[float]) -> None:
+    def control_joints(
+        self,
+        joint_indices: List[int],
+        target_positions: List[float],
+        target_forces: Optional[List[float]] = None,
+    ) -> None:
         """Control the joints of the robot.
 
         Args:
+            joint_indices (List[float]): List of joint indices.
             target_positions (List[float]): List of target positions/angles.
+            target_forces (List[float], optional): List of target forces. Defaults to 150 per joint.
         """
-        assert self.JOINT_INDICES is not None, "JOINT_INDICES must not be None"
-        assert self.JOINT_FORCES is not None, "JOINT_FORCES must not be None"
+        if target_forces is None:
+            target_forces = [150] * len(joint_indices)
 
         self.sim.control_joints(
             body=self.body_name,
-            joint_indices=self.JOINT_INDICES,
+            joint_indices=joint_indices,
             target_positions=target_positions,
-            target_forces=self.JOINT_FORCES,
+            target_forces=target_forces,
+        )
+
+    def get_num_joints(self) -> int:
+        """Get the total number of joints.
+
+        Returns:
+            int: Total number of joints.
+        """
+        return self.sim.get_num_joints(self.body_name)
+
+    def get_joint_name(self, joint: int) -> str:
+        """Get the name of the joint.
+
+        Args:
+            joint (int): Joint index in the body.
+
+        Returns:
+            str: The name of the joint.
+        """
+        return self.sim.get_joint_name(self.body_name, joint)
+
+    def get_joint_limits(self, joint: int) -> Tuple[float, float]:
+        """Get lower and upper limits of the joint.
+
+        Args:
+            joint (int): Joint index in the body.
+
+        Returns:
+            (float, float): Lower and upper limit of the joint.
+        """
+        lower_limit = self.sim.get_joint_lower_limit(self.body_name, joint)
+        upper_limit = self.sim.get_joint_upper_limit(self.body_name, joint)
+
+        return lower_limit, upper_limit
+
+    def set_joint_positions(
+        self, joint_indices: List[int], positions: List[float]
+    ) -> None:
+        """(Re)Set joint positions.
+
+        Args:
+            joint_indices (List[int]): Joint indices in the body.
+            positions (List[float]): Joint positions.
+        """
+        self.sim.set_joint_positions(
+            body=self.body_name, joint_indices=joint_indices, positions=positions
         )
 
 
