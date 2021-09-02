@@ -10,7 +10,7 @@ for reward_type in ["dense", "sparse"]:
         kwargs["difficult_mode"] = difficult_mode
 
         register(
-            id="ShadowHandReach{}-v1".format(suffix),
+            id="ShadowHandReach{}{}-v1".format(suffix, difficult_mode),
             entry_point="shadowhand_gym.envs:ShadowHandReachEnv",
             kwargs=kwargs,
             max_episode_steps=50,
