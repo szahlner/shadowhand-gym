@@ -3,21 +3,20 @@ from gym.envs.registration import register
 
 for reward_type in ["dense", "sparse"]:
     suffix = "Dense" if reward_type == "dense" else ""
-    kwargs = {"reward_type": reward_type}
 
     for difficult_mode in ["easy", "hard"]:
-        difficult_mode = "Hard" if difficult_mode == "hard" else ""
-        kwargs["difficult_mode"] = difficult_mode
+        suffix_2 = "Hard" if difficult_mode == "hard" else ""
+        kwargs = {"reward_type": reward_type, "difficult_mode": difficult_mode}
 
         register(
-            id="ShadowHandReach{}{}-v1".format(suffix, difficult_mode),
+            id="ShadowHandReach{}{}-v1".format(suffix, suffix_2),
             entry_point="shadowhand_gym.envs:ShadowHandReachEnv",
             kwargs=kwargs,
             max_episode_steps=50,
         )
 
-    # Unset the difficult mode
-    kwargs.pop("difficult_mode", None)
+    # Difficult mode not needed for Block
+    kwargs = {"reward_type": reward_type}
 
     register(
         id="ShadowHandBlock{}-v1".format(suffix),
