@@ -23,13 +23,27 @@ def distance(a: np.ndarray, b: np.ndarray) -> float:
     assert a.shape == b.shape, "Shape of 'a' must match shape of 'b'"
 
     # We do not care about the position
-    a = a[3:]
-    b = b[3:]
+    if len(a) == 7:
+        a = a[3:]
+        b = b[3:]
 
-    a = np.array(p.getEulerFromQuaternion(a))
-    b = np.array(p.getEulerFromQuaternion(b))
+        a = np.array(p.getEulerFromQuaternion(a))
+        b = np.array(p.getEulerFromQuaternion(b))
 
-    a[1] = b[1]
+        a[1] = b[1]
+    else:
+        a = a[:, 3:]
+        b = b[:, 3:]
+
+        x, y = [], []
+        for n in range(len(a)):
+            x.append(p.getEulerFromQuaternion(a[n]))
+            y.append(p.getEulerFromQuaternion(b[n]))
+        a = np.array(x)
+        b = np.array(y)
+
+        a[:, 1] = b[: , 1]
+
     a = rotations.euler2quat(a)
     b = rotations.euler2quat(b)
 
