@@ -40,9 +40,21 @@ env.close()
 | | |
 | :------------------------------: | :--------------------------------------------: |
 | `ShadowHandReach-v1` **easy** | `ShadowHandReach-v1` **hard** |
-| ![ShadowHandReach-v1 easy](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1_easy.gif) | ![ShadowHandReach-v1_hard](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1_hard.gif) |
+| ![ShadowHandReach-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReach-v1.gif) | ![ShadowHandReachHard-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandReachHard-v1.gif) |
 | `ShadowHandBlock-v1` **orientation only** | |
 | ![ShadowHandBlock-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/ShadowHandBlock-v1.gif) | |
+
+## Baseline results
+
+Baseline results trained with [rl-baselines3-zoo](https://github.com/DLR-RM/rl-baselines3-zoo).
+
+| | |
+| :------------------------------: | :--------------------------------------------: |
+| `ShadowHandReach-v1` **easy** | `ShadowHandReach-v1` **hard** |
+| ![Results_ShadowHandReach-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/Results_ShadowHandReach-v1.png) | ![Results_ShadowHandReachHard-v1](https://raw.githubusercontent.com/szahlner/shadowhand-gym/master/docs/Results_ShadowHandReachHard-v1.png) |
+| `ShadowHandBlock-v1` **orientation only** | |
+| Work in progress... | |
+
 
 ## Credits
 
