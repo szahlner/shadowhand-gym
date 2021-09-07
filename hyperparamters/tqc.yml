@@ -1,0 +1,39 @@
+ShadowHandReach-v1:
+    env_wrapper: sb3_contrib.common.wrappers.TimeFeatureWrapper
+    n_timesteps: !!float 200000
+    policy: 'MultiInputPolicy'
+    buffer_size: 1000000
+    ent_coef: 'auto'
+    batch_size: 256
+    gamma: 0.95
+    tau: 0.001
+    learning_rate: 0.001
+    learning_starts: 500
+    normalize: True
+    replay_buffer_class: HerReplayBuffer
+    replay_buffer_kwargs: "dict(
+        online_sampling=True,
+        goal_selection_strategy='future',
+        n_sampled_goal=4
+    )"
+    policy_kwargs: "dict(net_arch=[256, 256, 256], n_critics=1)"
+
+ShadowHandReachHard-v1:
+    env_wrapper: sb3_contrib.common.wrappers.TimeFeatureWrapper
+    n_timesteps: !!float 200000
+    policy: 'MultiInputPolicy'
+    buffer_size: 1000000
+    ent_coef: 'auto'
+    batch_size: 256
+    gamma: 0.95
+    tau: 0.001
+    learning_rate: 0.001
+    learning_starts: 500
+    normalize: True
+    replay_buffer_class: HerReplayBuffer
+    replay_buffer_kwargs: "dict(
+        online_sampling=True,
+        goal_selection_strategy='future',
+        n_sampled_goal=4
+    )"
+    policy_kwargs: "dict(net_arch=[256, 256, 256], n_critics=1)"
