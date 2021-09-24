@@ -104,6 +104,7 @@ class Block(Task):
                 get_data_path(), "assets", "materials", "textures", "block.png"
             ),
             mesh_scale=[self.block_half_extend] * 3,
+            friction=5,  # Increase friction
         )
 
     def get_goal(self) -> np.ndarray:
