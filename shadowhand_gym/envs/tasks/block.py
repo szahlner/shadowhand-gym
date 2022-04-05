@@ -101,7 +101,7 @@ class Block(Task):
             mass=0.5,
             object_path=os.path.join(get_data_path(), "assets", "obj", "block.obj"),
             texture_path=os.path.join(
-                get_data_path(), "assets", "materials", "textures", "block.png"
+                get_data_path(), "assets", "materials", "textures", "block_2022.png"
             ),
             mesh_scale=[self.block_half_extend] * 3,
             friction=5,  # Increase friction
